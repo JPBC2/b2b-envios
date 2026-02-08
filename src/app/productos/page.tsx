@@ -1,4 +1,7 @@
+'use client';
+
 import Link from "next/link";
+import { useState } from "react";
 import { commodities, categoryNames, type ProductCommodity } from "@/lib/ledger";
 
 const categoryIcons: Record<string, string> = {
@@ -8,7 +11,7 @@ const categoryIcons: Record<string, string> = {
     containers: '🪣',
 };
 
-// Sample prices for demo (in production, these would come from database)
+// Sample prices for demo
 const samplePrices: Record<string, { price: number; unit: string }> = {
     PLAYO: { price: 285, unit: 'rollo' },
     BOLSA: { price: 150, unit: 'paquete' },
@@ -18,16 +21,11 @@ const samplePrices: Record<string, { price: number; unit: string }> = {
     CUBETA: { price: 65, unit: 'pieza' },
 };
 
-interface ProductCardProps {
-    product: ProductCommodity;
-}
-
-function ProductCard({ product }: ProductCardProps) {
+function ProductCard({ product }: { product: ProductCommodity }) {
     const priceInfo = samplePrices[product.code];
 
     return (
         <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 card-hover border border-slate-100 group">
-            {/* Product Image */}
             <div className="h-48 bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center relative overflow-hidden">
                 <span className="text-6xl group-hover:scale-110 transition-transform duration-300">
                     {categoryIcons[product.category]}
@@ -37,7 +35,6 @@ function ProductCard({ product }: ProductCardProps) {
                 </span>
             </div>
 
-            {/* Product Info */}
             <div className="p-6">
                 <span className="text-xs font-semibold text-amber-600 uppercase tracking-wide">
                     {categoryNames[product.category]}
@@ -49,7 +46,6 @@ function ProductCard({ product }: ProductCardProps) {
                     {product.description}
                 </p>
 
-                {/* Price */}
                 {priceInfo && (
                     <div className="mb-4">
                         <span className="text-2xl font-bold text-slate-800">
@@ -59,17 +55,15 @@ function ProductCard({ product }: ProductCardProps) {
                     </div>
                 )}
 
-                {/* Specs */}
                 <div className="flex items-center gap-4 text-sm text-slate-500 mb-4">
                     <span className="flex items-center gap-1">
                         📦 Unidad: {product.unit}
                     </span>
                 </div>
 
-                {/* Actions */}
                 <div className="flex gap-2">
                     <Link
-                        href={`/productos/${product.code.toLowerCase()}`}
+                        href={`/productos/${product.code.toLowerCase()}/`}
                         className="flex-1 text-center bg-slate-100 text-slate-700 px-4 py-3 rounded-lg font-semibold hover:bg-slate-200 transition-colors"
                     >
                         Ver detalles
@@ -85,21 +79,11 @@ function ProductCard({ product }: ProductCardProps) {
     );
 }
 
-export default function ProductosPage({
-    searchParams,
-}: {
-    searchParams: Promise<{ cat?: string }>;
-}) {
-    // This is a server component, we can await searchParams
-    return <ProductosContent searchParamsPromise={searchParams} />;
-}
+export default function ProductosPage() {
+    const [categoryFilter, setCategoryFilter] = useState<string | null>(null);
 
-async function ProductosContent({ searchParamsPromise }: { searchParamsPromise: Promise<{ cat?: string }> }) {
-    const { cat } = await searchParamsPromise;
-
-    // Filter products by category if specified
-    const filteredProducts = cat
-        ? commodities.filter(c => c.category === cat)
+    const filteredProducts = categoryFilter
+        ? commodities.filter(c => c.category === categoryFilter)
         : commodities;
 
     const categories = ['all', 'packaging', 'protection', 'tape', 'containers'];
@@ -129,10 +113,10 @@ async function ProductosContent({ searchParamsPromise }: { searchParamsPromise: 
                     {/* Category Filters */}
                     <div className="flex flex-wrap gap-3 mb-8">
                         {categories.map((category) => (
-                            <Link
+                            <button
                                 key={category}
-                                href={category === 'all' ? '/productos' : `/productos?cat=${category}`}
-                                className={`px-5 py-2.5 rounded-full font-medium transition-all ${(category === 'all' && !cat) || cat === category
+                                onClick={() => setCategoryFilter(category === 'all' ? null : category)}
+                                className={`px-5 py-2.5 rounded-full font-medium transition-all ${(category === 'all' && !categoryFilter) || categoryFilter === category
                                         ? 'bg-amber-500 text-white shadow-md'
                                         : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
                                     }`}
@@ -143,7 +127,7 @@ async function ProductosContent({ searchParamsPromise }: { searchParamsPromise: 
                                         {categoryNames[category as keyof typeof categoryNames]}
                                     </>
                                 )}
-                            </Link>
+                            </button>
                         ))}
                     </div>
 
@@ -169,12 +153,12 @@ async function ProductosContent({ searchParamsPromise }: { searchParamsPromise: 
                             <p className="text-slate-600 mb-4">
                                 Intenta seleccionar otra categoría
                             </p>
-                            <Link
-                                href="/productos"
+                            <button
+                                onClick={() => setCategoryFilter(null)}
                                 className="text-amber-600 font-semibold hover:text-amber-700"
                             >
                                 Ver todos los productos
-                            </Link>
+                            </button>
                         </div>
                     )}
                 </div>
@@ -190,7 +174,7 @@ async function ProductosContent({ searchParamsPromise }: { searchParamsPromise: 
                         Contáctanos para productos especiales o pedidos personalizados
                     </p>
                     <Link
-                        href="/contacto"
+                        href="/contacto/"
                         className="inline-flex items-center justify-center bg-gradient-to-r from-amber-500 to-orange-500 text-white px-8 py-4 rounded-full font-bold hover:from-amber-600 hover:to-orange-600 transition-colors shadow-lg"
                     >
                         Contactar Ventas

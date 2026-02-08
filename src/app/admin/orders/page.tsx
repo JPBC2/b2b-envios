@@ -1,4 +1,7 @@
+'use client';
+
 import Link from 'next/link';
+import { useState } from 'react';
 import {
     sampleOrders,
     statusLabels,
@@ -7,21 +10,13 @@ import {
 } from '@/lib/data';
 import { getCommodity } from '@/lib/ledger';
 
-export default function OrdersPage({
-    searchParams,
-}: {
-    searchParams: Promise<{ status?: string }>;
-}) {
-    return <OrdersContent searchParamsPromise={searchParams} />;
-}
+export default function OrdersPage() {
+    const [statusFilter, setStatusFilter] = useState<OrderStatus | 'all'>('all');
 
-async function OrdersContent({ searchParamsPromise }: { searchParamsPromise: Promise<{ status?: string }> }) {
-    const { status } = await searchParamsPromise;
-
-    // Filter orders by status if specified
-    const filteredOrders = status
-        ? sampleOrders.filter(o => o.status === status)
-        : sampleOrders;
+    // Filter orders by status
+    const filteredOrders = statusFilter === 'all'
+        ? sampleOrders
+        : sampleOrders.filter(o => o.status === statusFilter);
 
     const statusFilters: (OrderStatus | 'all')[] = ['all', 'pending_payment', 'paid', 'preparing', 'shipped', 'delivered'];
 
@@ -61,10 +56,10 @@ async function OrdersContent({ searchParamsPromise }: { searchParamsPromise: Pro
                 {/* Status Filters */}
                 <div className="flex flex-wrap gap-2 mb-6">
                     {statusFilters.map((s) => (
-                        <Link
+                        <button
                             key={s}
-                            href={s === 'all' ? '/admin/orders' : `/admin/orders?status=${s}`}
-                            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${(s === 'all' && !status) || status === s
+                            onClick={() => setStatusFilter(s)}
+                            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${statusFilter === s
                                     ? 'bg-slate-800 text-white'
                                     : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
                                 }`}
@@ -75,7 +70,7 @@ async function OrdersContent({ searchParamsPromise }: { searchParamsPromise: Pro
                                     ({sampleOrders.filter(o => o.status === s).length})
                                 </span>
                             )}
-                        </Link>
+                        </button>
                     ))}
                 </div>
 
@@ -132,7 +127,7 @@ async function OrdersContent({ searchParamsPromise }: { searchParamsPromise: Pro
                                     <td className="px-6 py-4 text-center">
                                         <div className="flex justify-center gap-2">
                                             <Link
-                                                href={`/admin/orders/${order.id}`}
+                                                href={`/admin/orders/${order.id}/`}
                                                 className="px-3 py-1.5 bg-slate-100 text-slate-700 text-xs font-medium rounded-lg hover:bg-slate-200 transition-colors"
                                             >
                                                 Ver

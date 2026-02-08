@@ -2,6 +2,13 @@ import Link from 'next/link';
 import { sampleOrders, statusLabels, statusColors, type Order } from '@/lib/data';
 import { getCommodity } from '@/lib/ledger';
 
+// Generate static paths for all orders (required for static export)
+export function generateStaticParams() {
+    return sampleOrders.map((order) => ({
+        id: order.id,
+    }));
+}
+
 // Get order by ID
 function getOrderById(id: string): Order | undefined {
     return sampleOrders.find(o => o.id === id);
