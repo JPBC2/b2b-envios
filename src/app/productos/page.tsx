@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useState } from "react";
 import { commodities, categoryNames, type ProductCommodity } from "@/lib/ledger";
+import { getProductPrice } from "@/lib/ledger/prices";
+import { useCart } from "@/lib/cart-context";
 
 const categoryIcons: Record<string, string> = {
     packaging: '📦',
@@ -11,29 +13,35 @@ const categoryIcons: Record<string, string> = {
     containers: '🪣',
 };
 
-// Sample prices for demo
-const samplePrices: Record<string, { price: number; unit: string }> = {
-    PLAYO: { price: 285, unit: 'rollo' },
-    BOLSA: { price: 150, unit: 'paquete' },
-    ESQUINERO: { price: 8.50, unit: 'pieza' },
-    LAMINA: { price: 12, unit: 'pieza' },
-    CINTA: { price: 45, unit: 'rollo' },
-    CUBETA: { price: 65, unit: 'pieza' },
-};
-
 function ProductCard({ product }: { product: ProductCommodity }) {
-    const priceInfo = samplePrices[product.code];
+    const priceInfo = getProductPrice(product.code);
+    const { addItem } = useCart();
+    const [added, setAdded] = useState(false);
+
+    const handleAddToCart = () => {
+        if (!priceInfo) return;
+        addItem({
+            commodityCode: product.code,
+            name: product.nameEs,
+            unitPrice: priceInfo.unitPrice,
+            unit: product.unit,
+        });
+        setAdded(true);
+        setTimeout(() => setAdded(false), 1500);
+    };
 
     return (
         <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 card-hover border border-slate-100 group">
-            <div className="h-48 bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center relative overflow-hidden">
-                <span className="text-6xl group-hover:scale-110 transition-transform duration-300">
-                    {categoryIcons[product.category]}
-                </span>
-                <span className="absolute top-4 left-4 bg-amber-500 text-white text-xs font-bold px-3 py-1 rounded-full">
-                    Mayoreo
-                </span>
-            </div>
+            <Link href={`/productos/${product.code.toLowerCase()}/`}>
+                <div className="h-48 bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center relative overflow-hidden">
+                    <span className="text-6xl group-hover:scale-110 transition-transform duration-300">
+                        {categoryIcons[product.category]}
+                    </span>
+                    <span className="absolute top-4 left-4 bg-amber-500 text-white text-xs font-bold px-3 py-1 rounded-full">
+                        Mayoreo
+                    </span>
+                </div>
+            </Link>
 
             <div className="p-6">
                 <span className="text-xs font-semibold text-amber-600 uppercase tracking-wide">
@@ -49,9 +57,14 @@ function ProductCard({ product }: { product: ProductCommodity }) {
                 {priceInfo && (
                     <div className="mb-4">
                         <span className="text-2xl font-bold text-slate-800">
-                            ${priceInfo.price.toLocaleString('es-MX', { minimumFractionDigits: 2 })}
+                            ${priceInfo.unitPrice.toFixed(2)}
                         </span>
-                        <span className="text-slate-500 text-sm"> MXN / {priceInfo.unit}</span>
+                        <span className="text-slate-500 text-sm"> MXN / {product.unit.toLowerCase()}</span>
+                        {priceInfo.bulkPrice && (
+                            <p className="text-xs text-emerald-600 mt-1">
+                                💡 Desde ${priceInfo.bulkPrice.toFixed(2)} en mayoreo ({priceInfo.bulkMinOrder}+)
+                            </p>
+                        )}
                     </div>
                 )}
 
@@ -69,9 +82,13 @@ function ProductCard({ product }: { product: ProductCommodity }) {
                         Ver detalles
                     </Link>
                     <button
-                        className="flex-1 bg-gradient-to-r from-amber-500 to-orange-500 text-white px-4 py-3 rounded-lg font-semibold hover:from-amber-600 hover:to-orange-600 transition-colors"
+                        onClick={handleAddToCart}
+                        className={`flex-1 px-4 py-3 rounded-lg font-semibold transition-all ${added
+                                ? 'bg-emerald-500 text-white'
+                                : 'bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:from-amber-600 hover:to-orange-600'
+                            }`}
                     >
-                        Cotizar
+                        {added ? '✅ Agregado' : '🛒 Agregar'}
                     </button>
                 </div>
             </div>
@@ -117,8 +134,8 @@ export default function ProductosPage() {
                                 key={category}
                                 onClick={() => setCategoryFilter(category === 'all' ? null : category)}
                                 className={`px-5 py-2.5 rounded-full font-medium transition-all ${(category === 'all' && !categoryFilter) || categoryFilter === category
-                                        ? 'bg-amber-500 text-white shadow-md'
-                                        : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+                                    ? 'bg-amber-500 text-white shadow-md'
+                                    : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
                                     }`}
                             >
                                 {category === 'all' ? 'Todos' : (
