@@ -64,7 +64,7 @@ npm run dev
 npm run build
 ```
 
-Visita [http://localhost:3000](http://localhost:3000) para ver la aplicación.
+Visita [https://b2b-envios.pages.dev/](https://b2b-envios.pages.dev/) para ver la aplicación en vivo (o [http://localhost:3000](http://localhost:3000) para desarrollo local).
 
 ### 📂 Estructura del Proyecto
 
@@ -174,7 +174,7 @@ npm run dev
 npm run build
 ```
 
-Visit [http://localhost:3000](http://localhost:3000) to view the app.
+Visit [https://b2b-envios.pages.dev/](https://b2b-envios.pages.dev/) to view the live app (or [http://localhost:3000](http://localhost:3000) for local development).
 
 ### 📂 Project Structure
 
