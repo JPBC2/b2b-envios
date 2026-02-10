@@ -1,69 +1,193 @@
-# Cloudflare Pages Deployment Guide / Guía de Despliegue
+# Cloudflare Pages Deployment / Despliegue en Cloudflare Pages
+
+**[English](#english) | [Español](#español)**
+
+---
 
 ## English
 
-### Deploy to Cloudflare Pages
+### Prerequisites
 
-1. **Go to Cloudflare Dashboard**
-   - Visit [https://dash.cloudflare.com](https://dash.cloudflare.com)
-   - Sign in or create an account
+- [Node.js](https://nodejs.org/) v18 or later
+- [npm](https://www.npmjs.com/) (included with Node.js)
+- [Wrangler CLI](https://developers.cloudflare.com/workers/wrangler/) (Cloudflare's CLI tool)
+- A [Cloudflare account](https://dash.cloudflare.com/sign-up)
 
-2. **Create a new Pages project**
-   - Click "Workers & Pages" in the sidebar
-   - Click "Create" → "Pages" → "Connect to Git"
+### First-Time Setup
 
-3. **Connect GitHub Repository**
-   - Authorize Cloudflare to access your GitHub
-   - Select repository: `JPBC2/b2b-envios`
+#### 1. Install Wrangler (if not installed)
 
-4. **Configure Build Settings**
-   | Setting | Value |
-   |---------|-------|
-   | Framework preset | Next.js |
-   | Build command | `npm run build` |
-   | Build output directory | `.next` |
-   | Node.js version | 20 |
+```bash
+npm install -g wrangler
+```
 
-5. **Deploy**
-   - Click "Save and Deploy"
-   - Wait 2-3 minutes for build to complete
-   - Your site will be available at `https://b2b-envios.pages.dev`
+#### 2. Log in to Cloudflare
 
-### Automatic Deployments
+```bash
+npx wrangler login
+```
 
-After initial setup, every push to `main` branch will automatically trigger a new deployment.
+This will open a browser window to authenticate with your Cloudflare account.
+
+#### 3. Build the Project
+
+```bash
+npm install
+npm run build
+```
+
+This generates the static files in the `out/` directory.
+
+#### 4. Deploy to Cloudflare Pages
+
+```bash
+npx wrangler pages deploy out --project-name=b2b-envios
+```
+
+The first time you run this, Wrangler will create the Pages project automatically.  
+After deployment, you'll see the URL: **https://b2b-envios.pages.dev**
+
+### Redeploying After Changes
+
+Every time you make changes and want to update the live site:
+
+```bash
+# 1. Build the updated project
+npm run build
+
+# 2. Deploy to Cloudflare Pages
+npx wrangler pages deploy out --project-name=b2b-envios
+```
+
+**That's it!** Two commands to update your live site.
+
+### Quick Deploy (One-Liner)
+
+```bash
+npm run build && npx wrangler pages deploy out --project-name=b2b-envios
+```
+
+### Adding a Custom Deploy Script
+
+You can add a deploy script to `package.json` for convenience:
+
+```json
+{
+  "scripts": {
+    "deploy": "npm run build && npx wrangler pages deploy out --project-name=b2b-envios"
+  }
+}
+```
+
+Then deploy with:
+
+```bash
+npm run deploy
+```
+
+### Useful Commands
+
+| Command | Description |
+|---------|-------------|
+| `npx wrangler pages list` | List all your Pages projects |
+| `npx wrangler pages deployment list --project-name=b2b-envios` | List all deployments |
+| `npx wrangler pages deployment tail --project-name=b2b-envios` | View real-time logs |
+
+### Live URL
+
+- **Production**: https://b2b-envios.pages.dev
 
 ---
 
 ## Español
 
-### Desplegar en Cloudflare Pages
+### Requisitos previos
 
-1. **Ir al Dashboard de Cloudflare**
-   - Visita [https://dash.cloudflare.com](https://dash.cloudflare.com)
-   - Inicia sesión o crea una cuenta
+- [Node.js](https://nodejs.org/) v18 o superior
+- [npm](https://www.npmjs.com/) (incluido con Node.js)
+- [Wrangler CLI](https://developers.cloudflare.com/workers/wrangler/) (herramienta CLI de Cloudflare)
+- Una [cuenta de Cloudflare](https://dash.cloudflare.com/sign-up)
 
-2. **Crear un nuevo proyecto de Pages**
-   - Haz clic en "Workers & Pages" en la barra lateral
-   - Haz clic en "Create" → "Pages" → "Connect to Git"
+### Configuración Inicial
 
-3. **Conectar Repositorio de GitHub**
-   - Autoriza a Cloudflare para acceder a tu GitHub
-   - Selecciona el repositorio: `JPBC2/b2b-envios`
+#### 1. Instalar Wrangler (si no está instalado)
 
-4. **Configurar Ajustes de Build**
-   | Configuración | Valor |
-   |---------------|-------|
-   | Framework preset | Next.js |
-   | Build command | `npm run build` |
-   | Build output directory | `.next` |
-   | Node.js version | 20 |
+```bash
+npm install -g wrangler
+```
 
-5. **Desplegar**
-   - Haz clic en "Save and Deploy"
-   - Espera 2-3 minutos para que termine el build
-   - Tu sitio estará disponible en `https://b2b-envios.pages.dev`
+#### 2. Iniciar sesión en Cloudflare
 
-### Despliegues Automáticos
+```bash
+npx wrangler login
+```
 
-Después de la configuración inicial, cada push a la rama `main` activará automáticamente un nuevo despliegue.
+Esto abrirá una ventana del navegador para autenticarse con tu cuenta de Cloudflare.
+
+#### 3. Construir el proyecto
+
+```bash
+npm install
+npm run build
+```
+
+Esto genera los archivos estáticos en el directorio `out/`.
+
+#### 4. Desplegar en Cloudflare Pages
+
+```bash
+npx wrangler pages deploy out --project-name=b2b-envios
+```
+
+La primera vez que ejecutes esto, Wrangler creará el proyecto de Pages automáticamente.  
+Después del despliegue, verás la URL: **https://b2b-envios.pages.dev**
+
+### Redesplegar Después de Cambios
+
+Cada vez que hagas cambios y quieras actualizar el sitio en vivo:
+
+```bash
+# 1. Construir el proyecto actualizado
+npm run build
+
+# 2. Desplegar en Cloudflare Pages
+npx wrangler pages deploy out --project-name=b2b-envios
+```
+
+**¡Eso es todo!** Dos comandos para actualizar tu sitio en vivo.
+
+### Despliegue Rápido (Una sola línea)
+
+```bash
+npm run build && npx wrangler pages deploy out --project-name=b2b-envios
+```
+
+### Agregar un Script de Despliegue
+
+Puedes agregar un script en `package.json` para mayor comodidad:
+
+```json
+{
+  "scripts": {
+    "deploy": "npm run build && npx wrangler pages deploy out --project-name=b2b-envios"
+  }
+}
+```
+
+Luego despliega con:
+
+```bash
+npm run deploy
+```
+
+### Comandos Útiles
+
+| Comando | Descripción |
+|---------|-------------|
+| `npx wrangler pages list` | Listar todos tus proyectos de Pages |
+| `npx wrangler pages deployment list --project-name=b2b-envios` | Listar todos los despliegues |
+| `npx wrangler pages deployment tail --project-name=b2b-envios` | Ver logs en tiempo real |
+
+### URL en Vivo
+
+- **Producción**: https://b2b-envios.pages.dev
