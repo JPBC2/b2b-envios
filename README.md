@@ -1,95 +1,6 @@
 # B2B Envíos
 
-**[English](#english) | [Español](#español)**
-
----
-
-## English
-
-### 📦 B2B Wholesale E-commerce for Shipping Materials
-
-A B2B (business-to-business) wholesale e-commerce platform for selling packaging and shipping materials in Mexico City Metropolitan Area.
-
-### 🎯 Project Goals
-
-1. **Sell shipping materials online** — Stretch wrap, corner protectors, tape, bags, buckets
-2. **B2B focused** — Designed for business customers with prepaid orders
-3. **Accounting integrated** — Uses [@openbancor/ledger](https://github.com/openbancor/ledger) for double-entry accounting
-4. **SAT Mexico compliant** — Chart of accounts follows Mexican tax authority standards
-5. **Mobile-friendly** — Responsive design works on all devices
-
-### 🛠️ Tech Stack
-
-| Layer | Technology |
-|-------|------------|
-| Frontend | Next.js 16 + TypeScript |
-| Styling | Tailwind CSS |
-| Accounting | @openbancor/ledger |
-| Hosting | Cloudflare Pages |
-
-### 📋 Development Stages
-
-#### ✅ Phase 1: Foundation (Complete)
-- [x] Project setup (Next.js, TypeScript, Tailwind)
-- [x] Accounting integration (chart of accounts, commodities)
-- [x] Product catalog UI
-- [x] Admin panel (dashboard, orders, inventory)
-
-#### 🔄 Phase 2: E-commerce Features (In Progress)
-- [ ] Shopping cart
-- [ ] Order checkout with payment confirmation
-- [ ] Invoice generation
-
-#### ⏳ Phase 3: Financial Reports
-- [ ] Trial balance
-- [ ] Income statement
-- [ ] Balance sheet
-- [ ] XBRL-GL export for SAT
-
-#### ⏳ Phase 4: Production Ready
-- [ ] User authentication
-- [ ] Database integration (SQLite)
-- [ ] CFDI invoice integration
-
-### 🚀 Getting Started
-
-```bash
-# Install dependencies
-npm install
-
-# Run development server
-npm run dev
-
-# Build for production
-npm run build
-```
-
-Visit [http://localhost:3000](http://localhost:3000) to view the app.
-
-### 📂 Project Structure
-
-```
-src/
-├── app/                    # Next.js App Router pages
-│   ├── admin/              # Admin panel
-│   │   ├── orders/         # Order management
-│   │   ├── inventory/      # Stock control
-│   │   └── purchases/      # Supplier orders
-│   ├── productos/          # Product catalog
-│   └── page.tsx            # Homepage
-├── lib/
-│   ├── ledger/             # Accounting integration
-│   │   ├── accounts.ts     # Chart of accounts
-│   │   ├── commodities.ts  # Product definitions
-│   │   ├── entries.ts      # Journal entry helpers
-│   │   └── config.ts       # Ledger configuration
-│   └── data.ts             # Sample data store
-└── ...
-```
-
-### 📄 License
-
-MIT
+**[Español](#español) | [English](#english)**
 
 ---
 
@@ -198,5 +109,94 @@ src/
 ```
 
 ### 📄 Licencia
+
+MIT
+
+---
+
+## English
+
+### 📦 B2B Wholesale E-commerce for Shipping Materials
+
+A B2B (business-to-business) wholesale e-commerce platform for selling packaging and shipping materials in Mexico City Metropolitan Area.
+
+### 🎯 Project Goals
+
+1. **Sell shipping materials online** — Stretch wrap, corner protectors, tape, bags, buckets
+2. **B2B focused** — Designed for business customers with prepaid orders
+3. **Accounting integrated** — Uses [@openbancor/ledger](https://github.com/openbancor/ledger) for double-entry accounting
+4. **SAT Mexico compliant** — Chart of accounts follows Mexican tax authority standards
+5. **Mobile-friendly** — Responsive design works on all devices
+
+### 🛠️ Tech Stack
+
+| Layer | Technology |
+|-------|------------|
+| Frontend | Next.js 16 + TypeScript |
+| Styling | Tailwind CSS |
+| Accounting | @openbancor/ledger |
+| Hosting | Cloudflare Pages |
+
+### 📋 Development Stages
+
+#### ✅ Phase 1: Foundation (Complete)
+- [x] Project setup (Next.js, TypeScript, Tailwind)
+- [x] Accounting integration (chart of accounts, commodities)
+- [x] Product catalog UI
+- [x] Admin panel (dashboard, orders, inventory)
+
+#### 🔄 Phase 2: E-commerce Features (In Progress)
+- [ ] Shopping cart
+- [ ] Order checkout with payment confirmation
+- [ ] Invoice generation
+
+#### ⏳ Phase 3: Financial Reports
+- [ ] Trial balance
+- [ ] Income statement
+- [ ] Balance sheet
+- [ ] XBRL-GL export for SAT
+
+#### ⏳ Phase 4: Production Ready
+- [ ] User authentication
+- [ ] Database integration (SQLite)
+- [ ] CFDI invoice integration
+
+### 🚀 Getting Started
+
+```bash
+# Install dependencies
+npm install
+
+# Run development server
+npm run dev
+
+# Build for production
+npm run build
+```
+
+Visit [http://localhost:3000](http://localhost:3000) to view the app.
+
+### 📂 Project Structure
+
+```
+src/
+├── app/                    # Next.js App Router pages
+│   ├── admin/              # Admin panel
+│   │   ├── orders/         # Order management
+│   │   ├── inventory/      # Stock control
+│   │   └── purchases/      # Supplier orders
+│   ├── productos/          # Product catalog
+│   └── page.tsx            # Homepage
+├── lib/
+│   ├── ledger/             # Accounting integration
+│   │   ├── accounts.ts     # Chart of accounts
+│   │   ├── commodities.ts  # Product definitions
+│   │   ├── entries.ts      # Journal entry helpers
+│   │   └── config.ts       # Ledger configuration
+│   └── data.ts             # Sample data store
+└── ...
+```
+
+### 📄 License
 
 MIT
